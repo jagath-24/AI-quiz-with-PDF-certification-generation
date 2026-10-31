@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Certificate — QuizAI</title>
+  <link rel="stylesheet" href="/css/style.css?v=3">
+</head>
+<body>
+  <div class="app-panel">
+    <div class="panel-chrome">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+
+    <div class="page-header">
+      <div class="panel-label">🔐 QuizAI</div>
+      <h2>Verify Certificate</h2>
+      <p>Enter a certificate number to confirm its authenticity</p>
+    </div>
+
+    <div class="panel-body narrow">
+      <form id="verifyForm">
+        <div class="form-group">
+          <label>Certificate Number</label>
+          <input type="text" id="certificateNumber" placeholder="CERT-XXXXXXXX" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full btn-lg">🔍 Verify Now</button>
+      </form>
+
+      <div id="verificationResult" class="verify-result" style="display:none;">
+        <div id="resultContent"></div>
+      </div>
+
+      <div style="margin-top:24px; text-align:center;">
+        <a href="/" class="btn btn-ghost">← Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{/js/verify.js}"></script>
+</body>
+</html>

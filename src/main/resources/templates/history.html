@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard — QuizAI</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0d1117;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.14) 0%, transparent 60%);
+    }
+    .panel {
+      width: 100%;
+      max-width: 700px;
+      background: #161b27;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+      overflow: hidden;
+    }
+    .chrome {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 14px 22px;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.015);
+    }
+    .dot { width: 13px; height: 13px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+
+    .header {
+      text-align: center;
+      padding: 44px 40px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #6366f1;
+      margin-bottom: 12px;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #f1f5f9;
+      margin-bottom: 6px;
+    }
+    .header p {
+      font-size: 0.88rem;
+      color: #64748b;
+    }
+
+    .body { padding: 28px 36px 36px; }
+
+    /* ── LEADERBOARD ROWS ── */
+    .lb-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: #1e2736;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      margin-bottom: 10px;
+    }
+    .lb-row:hover {
+      border-color: rgba(99,102,241,0.5);
+      background: #243044;
+    }
+    .rank-badge {
+      width: 42px; height: 42px;
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .rank-1 { background: rgba(245,158,11,0.25); color: #fbbf24; }
+    .rank-2 { background: rgba(148,163,184,0.2);  color: #cbd5e1; }
+    .rank-3 { background: rgba(180,83,9,0.25);    color: #d97706; }
+    .rank-n { background: rgba(255,255,255,0.06); color: #64748b; font-size: 0.9rem; }
+
+    .lb-info { flex: 1; }
+    .lb-user  { font-size: 0.95rem; font-weight: 700; color: #f1f5f9; }
+    .lb-topic { font-size: 0.78rem; color: #64748b; margin-top: 3px; }
+
+    .lb-score {
+      font-size: 1.4rem;
+      font-weight: 800;
+      min-width: 60px;
+      text-align: right;
+    }
+    .score-high   { color: #10b981; }
+    .score-mid    { color: #f59e0b; }
+    .score-low    { color: #ef4444; }
+
+    .empty {
+      text-align: center;
+      padding: 48px 0;
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+
+    /* ── BUTTONS ── */
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 28px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.93rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+    }
+    .btn-primary:hover { background: linear-gradient(135deg,#5558e8,#7c3aed); transform: translateY(-2px); }
+    .btn-ghost {
+      background: #1e2736;
+      color: #94a3b8;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .btn-ghost:hover { background: #243044; color: #f1f5f9; transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <div class="chrome">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+    </div>
+
+    <div class="header">
+      <div class="label">&#127942; QuizAI</div>
+      <h1>Leaderboard</h1>
+      <p>Top 10 highest scoring quizzes</p>
+    </div>
+
+    <div class="body">
+
+      <!-- Empty state -->
+      <div th:if="${#lists.isEmpty(leaderboard)}" class="empty">
+        <div class="empty-icon">&#127942;</div>
+        <p>No quiz results yet. Be the first!</p>
+      </div>
+
+      <!-- Leaderboard rows -->
+      <div th:each="quizSession, stat : ${leaderboard}"
+           class="lb-row">
+
+        <!-- Rank badge -->
+        <div th:if="${stat.index == 0}" class="rank-badge rank-1">&#129351;</div>
+        <div th:if="${stat.index == 1}" class="rank-badge rank-2">&#129352;</div>
+        <div th:if="${stat.index == 2}" class="rank-badge rank-3">&#129353;</div>
+        <div th:if="${stat.index >= 3}" class="rank-badge rank-n"
+             th:text="'#' + ${stat.count}"></div>
+
+        <!-- Info -->
+        <div class="lb-info">
+          <div class="lb-user" th:text="'User #' + ${quizSession.userId}">User</div>
+          <div class="lb-topic" th:text="'&#128218; ' + ${quizSession.topic}">Topic</div>
+        </div>
+
+        <!-- Score -->
+        <div class="lb-score"
+             th:classappend="${quizSession.score >= 80} ? 'score-high' : (${quizSession.score >= 60} ? 'score-mid' : 'score-low')"
+             th:text="${quizSession.score} + '%'">0%</div>
+      </div>
+
+      <div class="actions">
+        <a href="/generate" class="btn btn-primary">&#128640; Take a Quiz</a>
+        <a href="/"         class="btn btn-ghost">&#8592; Home</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

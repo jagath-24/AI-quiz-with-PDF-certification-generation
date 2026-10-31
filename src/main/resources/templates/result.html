@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results — QuizAI</title>
+  <link rel="stylesheet" href="/css/style.css?v=3">
+</head>
+<body>
+  <div class="app-panel">
+    <div class="panel-chrome">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+
+    <div class="result-score-box">
+      <div class="score-ring" th:classappend="${passed} ? 'pass' : 'fail'">
+        <span class="score-num" th:text="${score} + '%'"></span>
+        <span class="score-lbl">Score</span>
+      </div>
+      <h2 th:text="${passed} ? '🎉 You Passed!' : '😤 Keep Trying!'"></h2>
+      <p th:text="${passed} ? 'Great work! Your certificate is ready to download.' : 'You need at least 60% to earn a certificate.'"></p>
+    </div>
+
+    <div class="detail-list">
+      <div class="detail-row">
+        <span class="detail-label">👤 Name</span>
+        <span class="detail-value" th:text="${user.username}"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">📚 Topic</span>
+        <span class="detail-value" th:text="${quizSession.topic}"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">❓ Questions</span>
+        <span class="detail-value" th:text="${quizSession.totalQuestions}"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">📅 Date</span>
+        <span class="detail-value" th:text="${#temporals.format(quizSession.dateTaken, 'MMM dd, yyyy HH:mm')}"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">🏅 Status</span>
+        <span class="detail-value"
+              th:text="${passed} ? 'PASSED ✅' : 'FAILED ❌'"
+              th:style="${passed} ? 'color:#10b981' : 'color:#ef4444'"></span>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <div th:if="${passed}">
+        <form th:action="@{/certificate/generate/{id}(id=${quizSession.id})}" method="post">
+          <button type="submit" class="btn btn-success btn-lg">📄 Download Certificate</button>
+        </form>
+      </div>
+      <a href="/generate" class="btn btn-primary btn-lg">🔄 Try Again</a>
+      <a href="/" class="btn btn-ghost btn-lg">🏠 Home</a>
+    </div>
+  </div>
+</body>
+</html>

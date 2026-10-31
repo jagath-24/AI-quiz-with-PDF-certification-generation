@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz — QuizAI</title>
+  <link rel="stylesheet" href="/css/style.css?v=3">
+</head>
+<body>
+  <div class="app-panel">
+    <div class="panel-chrome">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+
+    <div class="quiz-topbar">
+      <h2 th:text="${quizSession.topic}">Topic</h2>
+      <div class="quiz-meta">
+        <span class="chip" th:text="${quizSession.totalQuestions} + ' Questions'"></span>
+        <span class="chip chip-green" id="timer">0:00</span>
+        <span class="chip" th:text="'👤 ' + ${username}"></span>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressBar" style="width:0%"></div>
+    </div>
+
+    <form action="/quiz/submit" method="post" id="quizForm">
+      <input type="hidden" name="sessionId" th:value="${quizSession.id}">
+
+      <div style="padding: 28px 36px;">
+        <div th:each="question, iterStat : ${questions}" class="question-wrap">
+          <div class="q-number" th:text="'Question ' + ${iterStat.count} + ' of ' + ${iterStat.size}"></div>
+          <p class="q-text" th:text="${question.questionText}"></p>
+          <div class="options">
+            <label class="option" onclick="pick(this)">
+              <input type="radio" th:name="'question_' + ${question.id}" value="A" required>
+              <div class="opt-letter">A</div>
+              <span class="opt-text" th:text="${question.optionA}"></span>
+            </label>
+            <label class="option" onclick="pick(this)">
+              <input type="radio" th:name="'question_' + ${question.id}" value="B">
+              <div class="opt-letter">B</div>
+              <span class="opt-text" th:text="${question.optionB}"></span>
+            </label>
+            <label class="option" onclick="pick(this)">
+              <input type="radio" th:name="'question_' + ${question.id}" value="C">
+              <div class="opt-letter">C</div>
+              <span class="opt-text" th:text="${question.optionC}"></span>
+            </label>
+            <label class="option" onclick="pick(this)">
+              <input type="radio" th:name="'question_' + ${question.id}" value="D">
+              <div class="opt-letter">D</div>
+              <span class="opt-text" th:text="${question.optionD}"></span>
+            </label>
+          </div>
+        </div>
+
+        <div style="text-align:center; padding: 20px 0 8px;">
+          <button type="submit" class="btn btn-primary btn-lg">✅ Submit Quiz</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    let s = 0;
+    setInterval(() => {
+      s++;
+      const m = Math.floor(s/60), sec = s%60;
+      document.getElementById('timer').textContent = m + ':' + String(sec).padStart(2,'0');
+    }, 1000);
+
+    const total = document.querySelectorAll('.question-wrap').length;
+    function updateProgress() {
+      const done = document.querySelectorAll('input[type=radio]:checked').length;
+      document.getElementById('progressBar').style.width = (done/total*100) + '%';
+    }
+
+    function pick(label) {
+      const name = label.querySelector('input').name;
+      document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.closest('.option').classList.remove('selected'));
+      label.classList.add('selected');
+      updateProgress();
+    }
+  </script>
+</body>
+</html>

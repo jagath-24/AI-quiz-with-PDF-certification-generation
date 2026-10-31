@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Quiz — QuizAI</title>
+  <link rel="stylesheet" href="/css/style.css?v=3">
+</head>
+<body>
+  <div class="app-panel fade-in">
+    <div class="panel-chrome">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+
+    <div class="split">
+      <div class="split-left">
+        <div class="panel-label">⚡ QuizAI</div>
+        <h1>Configure<br><strong>Your Quiz</strong></h1>
+        <p>Fill in your details, choose a topic and difficulty, then optionally generate fresh AI questions before starting.</p>
+        <a href="/" class="btn btn-ghost btn-lg" style="margin-top:8px;">← Back</a>
+      </div>
+
+      <div class="split-right" style="padding: 32px 36px; overflow-y: auto; max-height: 520px;">
+        <div th:if="${error}" class="alert alert-error">⚠️ <span th:text="${error}"></span></div>
+
+        <div class="generate-box">
+          <button id="generateBtn" class="btn btn-primary">🤖 Generate AI Questions</button>
+          <p>Optional — generates fresh questions via Groq for your topic</p>
+        </div>
+
+        <form id="quizForm" action="/quiz/start" method="post">
+          <input type="hidden" id="questionIds" name="questionIds">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" id="username" name="username" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="email" name="email" placeholder="you@email.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Topic</label>
+            <input type="text" id="topic" name="topic" placeholder="e.g. Python, Java, History" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Difficulty</label>
+              <select id="difficulty" name="difficulty">
+                <option value="Easy">Easy</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Questions</label>
+              <input type="number" id="questionCount" name="questionCount" value="5" min="3" max="10">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-success btn-full btn-lg">🎯 Start Quiz</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{/js/generate.js}"></script>
+</body>
+</html>

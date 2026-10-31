@@ -1,0 +1,57 @@
+AI QUIZ & CERTIFICATION SYSTEM
+==============================
+
+The application is a Spring Boot quiz platform with AI question generation, quiz scoring, a leaderboard, certificate verification, and PDF certificate downloads.
+
+QUICK START (NO EXTERNAL SERVICES)
+-----------------------------------
+Prerequisites:
+- Java 17 or newer
+- Maven 3.8 or newer
+
+Run from the project root:
+
+    mvn clean test
+    mvn spring-boot:run
+
+Open http://localhost:8080. The application uses a local file-based H2 database at ./data/quiz_ai_system and seeds a small built-in question bank on first start. This lets you complete a quiz without MySQL or an AI API key.
+
+To use the built-in bank, enter one of these topics and select Easy: Java, Python, Web Development, SQL, or Computer Science. The quiz can also be started directly without clicking the AI button.
+
+OPTIONAL GROQ AI GENERATION
+---------------------------
+Set the API key before starting the app:
+
+    export GROQ_API_KEY=your-key
+    mvn spring-boot:run
+
+Optional settings include GROQ_API_URL, GROQ_MODEL, and PORT. If the key is missing, the UI shows a clear message and the built-in bank remains available.
+
+OPTIONAL MYSQL CONFIGURATION
+----------------------------
+Create the database and tables with database/schema.sql, then configure the connection through environment variables:
+
+    export DB_URL=jdbc:mysql://localhost:3306/quiz_ai_system
+    export DB_USERNAME=root
+    export DB_PASSWORD=your-password
+    export DB_DRIVER=com.mysql.cj.jdbc.Driver
+    export DDL_AUTO=update
+
+The application defaults to H2 when these variables are not set. Never commit real passwords or API keys; application-example.properties contains placeholders only.
+
+FEATURE FLOW
+------------
+1. Open /generate and enter your name, email, topic, difficulty, and question count.
+2. Optionally choose Generate AI Questions when GROQ_API_KEY is configured.
+3. Click Start Quiz, answer every question, and submit.
+4. Passing requires 60% or more. The result page can generate and download a PDF certificate.
+5. Use /certificate/verify to verify a certificate number.
+6. Use /history to view the leaderboard.
+
+BUILD AND VERIFICATION
+----------------------
+- mvn clean test: compiles the application and runs the Spring context test.
+- mvn package: builds target/ai-quiz-certification-system-1.0.0.jar.
+- java -jar target/ai-quiz-certification-system-1.0.0.jar: runs the packaged application.
+
+The app uses environment-driven configuration, validates quiz input, avoids duplicate answers and certificates, safely handles repeated result-page loads, and returns actionable errors for failed AI generation.

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizAI — Certification System</title>
+  <link rel="stylesheet" href="/css/style.css?v=3">
+</head>
+<body>
+  <div class="app-panel fade-in">
+    <div class="panel-chrome">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+
+    <div class="split">
+      <div class="split-left">
+        <div class="panel-label">⚡ Powered by Groq AI</div>
+        <h1>Welcome to the<br><strong>QuizAI System!</strong></h1>
+        <p>Generate AI-powered quizzes on any topic, challenge yourself, and earn verifiable PDF certificates when you pass.</p>
+        <div class="meta">Pick a section to get started.</div>
+      </div>
+
+      <div class="split-right">
+        <a href="/generate" class="topic-btn">
+          <div class="topic-icon icon-blue">🚀</div>
+          <span>Start a Quiz</span>
+        </a>
+        <a href="/history" class="topic-btn">
+          <div class="topic-icon icon-yellow">🏆</div>
+          <span>Leaderboard</span>
+        </a>
+        <a href="/certificate/verify" class="topic-btn">
+          <div class="topic-icon icon-green">🔍</div>
+          <span>Verify Certificate</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

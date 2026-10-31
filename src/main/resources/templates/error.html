@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error — QuizAI</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <style>body { justify-content: flex-start; padding: 24px; } .app-panel { max-width: 500px; }</style>
+</head>
+<body>
+  <div class="app-panel fade-in">
+    <div class="panel-chrome">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+    <div class="panel-body">
+      <div class="error-center">
+        <div class="err-icon">💥</div>
+        <h2>Something went wrong</h2>
+        <p>An unexpected error occurred.</p>
+        <div class="error-box" th:text="${error}">Unknown error</div>
+        <a href="/" class="btn btn-primary btn-lg">🏠 Back to Home</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
